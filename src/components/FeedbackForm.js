@@ -3,8 +3,22 @@ import Button from './shared/Button';
 import Card from './shared/Card';
 export default function FeedbackForm() {
 	const [review, setReview] = useState('');
+	const [isDisabled, setIsDisabled] = useState(true);
+	const [message, setMessage] = useState('');
+
 	const handleChange = (e) => {
-		setReview(e.target.value);
+		const { value } = e.target;
+		if (value === '') {
+			setMessage(null);
+			setIsDisabled(true);
+		} else if (value !== '' && value.trim().length < 10) {
+			setMessage('review must be equal to 10 chars');
+			setIsDisabled(true);
+		} else {
+			setMessage(null);
+			setIsDisabled(false);
+		}
+		setReview(value);
 	};
 	return (
 		<Card>
@@ -18,10 +32,11 @@ export default function FeedbackForm() {
 						placeholder="write a review"
 						value={review}
 					/>
-					<Button type="submit" version="secondary">
+					<Button isDisabled={isDisabled} type="submit" version="secondary">
 						Send
 					</Button>
 				</div>
+				<p className="message">{message}</p>
 			</form>
 		</Card>
 	);
