@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import FeedbackForm from './components/FeedbackForm';
 import FeedbackList from './components/FeedbackList';
@@ -8,6 +9,11 @@ import './index.css';
 
 export default function App() {
 	const [feedback, setFeedback] = useState(FeedbackData);
+
+	const handleAdd = (newFeedback) => {
+		newFeedback.id = nanoid();
+		setFeedback([newFeedback, ...feedback]);
+	};
 	const handleDelete = (id) => {
 		setFeedback((preFeedback) =>
 			preFeedback.filter((feedback) => feedback.id !== id)
@@ -17,7 +23,7 @@ export default function App() {
 		<>
 			<Header />
 			<div className="container">
-				<FeedbackForm />
+				<FeedbackForm handleAdd={handleAdd} />
 				<FeedbackStats feedback={feedback} />
 				<FeedbackList handleDelete={handleDelete} feedback={feedback} />
 			</div>
